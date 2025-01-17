@@ -57,6 +57,7 @@ import Data.Text.Prettyprint.Doc.Render.Text
 
 import qualified Data.ByteString.Char8 as BL
 import qualified Data.ByteString.Short as BS
+import qualified Data.Bits as BB
 import Data.Char (chr, ord, isAscii, isControl, isLetter, isDigit)
 import Data.Foldable (toList)
 import Data.Int
@@ -1054,10 +1055,7 @@ instance Pretty C.Constant where
     if specialFP val
       then "0x" <> (pretty . pack) (showHex (doubleToWord val) "")
       else pretty $ pack $ printf "%6.6e" val
-  pretty (C.Float (F.Single val))      =
-    if specialFP val
-      then "0x" <> (pretty . pack) (showHex (floatToWord val) "")
-      else pretty $ pack $ printf "%6.6e" val
+  pretty (C.Float (F.Single val))      = "0x" <> (pretty . pack) (showHex (doubleToWord (realToFrac val)) "")
   pretty (C.Float (F.Half val))        = pretty $ pack $ printf "%6.6e" val
   pretty (C.Float (F.Quadruple val _)) = pretty $ pack $ printf "%6.6e" val
   pretty (C.Float (F.X86_FP80 val _))  = pretty $ pack $ printf "%6.6e" val
